@@ -1,5 +1,6 @@
 const express = require("express");
 const { chats } = require("./Dummy/data");
+require('dotenv').config()
 const { connectDB } = require("./config/mongoDb");
 const { notFound, errorHandler } = require("./middleware/errorHandlers");
 const userRoute = require("./routes/userRoute");
