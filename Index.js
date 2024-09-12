@@ -13,12 +13,13 @@ const app = express();
 connectDB();
 
 const corsOptions = {
-  origin: process.env.ORIGIN,
-  credentials: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
-  optionsSuccessStatus: 200
+  origin: process.env.ORIGIN || 'https://buzz-chat-frontend-tan.vercel.app',  // Fallback to frontend URL
+  credentials: true,  // Allow credentials such as cookies, authorization headers, etc.
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',  // Allowed methods
+  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',  // Allowed headers
+  optionsSuccessStatus: 200  // For legacy browsers
 };
+
 
 app.use(cors(corsOptions));
 
