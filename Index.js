@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { chats } = require("./Dummy/data");
-require('dotenv').config();
+require("dotenv").config();
 const { connectDB } = require("./config/mongoDb");
 const { notFound, errorHandler } = require("./middleware/errorHandlers");
 const userRoute = require("./routes/userRoute");
@@ -10,41 +10,37 @@ const messageRoute = require("./routes/messageRoute");
 
 const app = express();
 
-// Connect to the database
 connectDB();
 
-// CORS middleware
-app.use(cors({
-  origin: process.env.ORIGIN || '*', // Replace '*' with specific origin if needed
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+const corsOptions = {
+  origin: process.env.ORIGIN,
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
+  optionsSuccessStatus: 200
+};
 
-// Middleware to parse JSON bodies
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
-// Define routes
 app.use("/api/user", userRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
 
-// Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
 
-// Define the port
 const PORT = process.env.PORT || 5000;
 
-// Start the server
 const Server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// Socket.IO setup
 const io = require("socket.io")(Server, {
   pingTimeout: 60000,
   cors: {
-    origin: process.env.ORIGIN || '*', // Match the CORS origin for Socket.IO
+    origin: process.env.ORIGIN || "*", // Match the CORS origin for Socket.IO
   },
 });
 
