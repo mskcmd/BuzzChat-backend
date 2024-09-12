@@ -12,19 +12,32 @@ const app = express();
 
 connectDB();
 
+
 const corsOptions = {
-  origin: process.env.ORIGIN || 'https://buzz-chat-frontend-tan.vercel.app',  // Allow specific origin
-  credentials: true,  // Allow cookies, authorization headers, etc.
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',  // Allowed methods
-  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',  // Allowed headers
-  optionsSuccessStatus: 200  // For legacy browsers
+  origin: process.env.ORIGIN || 'https://buzz-chat-frontend-tan.vercel.app',  
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
+  optionsSuccessStatus: 200,
 };
 
-// Enable preflight (OPTIONS) requests and apply CORS to all routes
-app.use(cors(corsOptions));
+app.use('*',cors(corsOptions));
 
-// If you want to explicitly handle preflight OPTIONS requests (optional)
-app.options('*', cors(corsOptions)); 
+app.use((req ,res ,next) => {
+  res.setHeader("Access-Control-Allow-Origin", process.env.ORIGIN || "*");
+  res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+
+
 
 app.use(express.json());
 
