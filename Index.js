@@ -13,15 +13,18 @@ const app = express();
 connectDB();
 
 const corsOptions = {
-  origin: process.env.ORIGIN || 'https://buzz-chat-frontend-tan.vercel.app',  // Fallback to frontend URL
-  credentials: true,  // Allow credentials such as cookies, authorization headers, etc.
+  origin: process.env.ORIGIN || 'https://buzz-chat-frontend-tan.vercel.app',  // Allow specific origin
+  credentials: true,  // Allow cookies, authorization headers, etc.
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',  // Allowed methods
   allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',  // Allowed headers
   optionsSuccessStatus: 200  // For legacy browsers
 };
 
-
+// Enable preflight (OPTIONS) requests and apply CORS to all routes
 app.use(cors(corsOptions));
+
+// If you want to explicitly handle preflight OPTIONS requests (optional)
+app.options('*', cors(corsOptions)); 
 
 app.use(express.json());
 
